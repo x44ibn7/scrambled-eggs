@@ -4,10 +4,15 @@ import base64
 import shutil
 import zipfile
 from cryptography.fernet import Fernet
+import sys
 
-INPUT_DIR = "Input"
-OUTPUT_DIR = "Output"
-TEMP_ARCHIVE = "temp.zip"
+# Get the directory where the executable is located
+exe_dir = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+
+# Ensure INPUT_DIR and OUTPUT_DIR are in the same directory as the executable
+INPUT_DIR = os.path.join(exe_dir, "Input")
+OUTPUT_DIR = os.path.join(exe_dir, "Output")
+TEMP_ARCHIVE = os.path.join(exe_dir, "temp.zip")
 
 def derive_key_from_password(password: str) -> bytes:
     """
@@ -55,7 +60,7 @@ def cipher_folder_or_file():
             data = file.read()
         encrypted_data = fernet.encrypt(data)
 
-        # Save encrypted file
+        # Save encrypted file in the Output folder
         encrypted_file = os.path.join(OUTPUT_DIR, input_items[0] + ".enc")
         with open(encrypted_file, "wb") as file:
             file.write(encrypted_data)
@@ -73,7 +78,7 @@ def cipher_folder_or_file():
             data = file.read()
         encrypted_data = fernet.encrypt(data)
 
-        # Save the encrypted data
+        # Save the encrypted data in the Output folder
         encrypted_file = os.path.join(OUTPUT_DIR, "encrypted_data.enc")
         with open(encrypted_file, "wb") as file:
             file.write(encrypted_data)
@@ -132,10 +137,14 @@ def decipher_folder_or_file():
 
 def main():
     print("Folder/File Cipher/Decipher App")
+    print(f"Executable directory: {exe_dir}")
+    print(f"Input directory: {INPUT_DIR}")
+    print(f"Output directory: {OUTPUT_DIR}")
     print("1. Cipher folder or file")
     print("2. Decipher folder or file")
     choice = input("Choose an option (1/2): ")
 
+    # Ensure the directories exist in the exe folder
     os.makedirs(INPUT_DIR, exist_ok=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
