@@ -61,5 +61,3 @@ Encryption Standard: The app uses Fernet encryption based on AES, which is consi
 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-Feel free to adjust or expand on this as needed! It 
